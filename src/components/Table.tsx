@@ -1,31 +1,30 @@
-// type ROWS = Array<{
-//   id: number
-//   firstName: string
-//   lastName: string
-//   middleName: string
-//   birthDate: string
-//   phone: string
-// }>
-
-export function Table(data: { columns: Array<string>; rows: Array<number> }) {
+export default function Table({
+  columns /* Array<string> */,
+  rows /* Array<string[]> */,
+  renderCell = ({ value }) => value,
+}) {
   return (
-    <table className='table'>
+    <table className="table">
       <thead>
         <tr>
-          {data.columns.map(value => {
+          {columns.map(value => {
             return <th key={value}>{value}</th>
           })}
         </tr>
       </thead>
 
       <tbody>
-        {data.rows.map(cells => {
-          const rowId = cells
+        {rows.map(cells => {
+          const [rowId] = cells
 
           return (
             <tr key={rowId}>
               {cells.map((value, cellIndex) => {
-
+                return (
+                  <td key={`${rowId}${cellIndex}${value}`}>
+                    {renderCell({ value, cellIndex, rowId })}
+                  </td>
+                )
               })}
             </tr>
           )
