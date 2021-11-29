@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { Table } from '../components/Table'
+import Table from '../components/Table'
 
 const COLUMNS = ['ID', 'Name', 'Birth Date']
 const ROWS = [
@@ -27,7 +27,14 @@ export default function EmployeesPage() {
     <>
       <Link to={`/employees/:id`}>to employee</Link>
       <h1>Hello, it's Employees Page</h1>
-      <Table columns={COLUMNS} />
+      <Table 
+        columns={COLUMNS} 
+        rows={ROWS.map(employee => {
+          const { id, firstName, lastName, middleName, birthDate} = employee
+          const fullName = `${lastName} ${firstName} ${middleName}`
+
+          return [`${id}`, fullName, birthDate]
+        })} />
     </>
   )
 }

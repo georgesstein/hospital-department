@@ -1,20 +1,32 @@
-export default function Table({
-  columns /* Array<string> */,
-  rows /* Array<string[]> */,
-  renderCell = ({ value }) => value,
-}) {
+type Props = {
+  columns: Array<string>;
+  rows: Array<string[]>;
+}
+
+// type ROW = {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   middleName: string;
+//   birthDate: string;
+// }
+
+export default function Table(
+  p: Props
+  // renderCell = ({ value }) => value,
+) {
   return (
     <table className="table">
       <thead>
         <tr>
-          {columns.map(value => {
+          {p.columns.map(value => {
             return <th key={value}>{value}</th>
           })}
         </tr>
       </thead>
 
       <tbody>
-        {rows.map(cells => {
+        {p.rows.map(cells => {
           const [rowId] = cells
 
           return (
@@ -22,7 +34,8 @@ export default function Table({
               {cells.map((value, cellIndex) => {
                 return (
                   <td key={`${rowId}${cellIndex}${value}`}>
-                    {renderCell({ value, cellIndex, rowId })}
+                    {value}
+                    {/* {renderCell({ value, cellIndex, rowId })} */}
                   </td>
                 )
               })}
