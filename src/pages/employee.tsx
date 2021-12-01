@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 export const EMPLOYEE_ID = 'id'
 
 export default function EmployeePage() {
-  const { id } = useParams()
+  const { id } = useParams<typeof EMPLOYEE_ID>()
   
   return (
     <>

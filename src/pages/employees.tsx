@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import Table from '../components/Table'
 
-const COLUMNS = ['ID', 'Name', 'Birth Date']
+const COLUMNS = ['ID', 'Full Name', 'Birth Date']
 const ROWS = [
   {
     id: 1,
@@ -26,7 +26,6 @@ export default function EmployeesPage() {
   return (
     <>
       <Link to={`/employees/:id`}>to employee</Link>
-      <h1>Hello, it's Employees Page</h1>
       <Table 
         columns={COLUMNS} 
         rows={ROWS.map(employee => {
@@ -34,7 +33,15 @@ export default function EmployeesPage() {
           const fullName = `${lastName} ${firstName} ${middleName}`
 
           return [`${id}`, fullName, birthDate]
-        })} />
+        })}
+        renderCell={({ value, cellIndex, rowId }) => {
+          if (cellIndex === 1) {
+            return <Link to={`/employees/${rowId}`}>{value}</Link>
+          }
+
+          return value
+        }}
+      />
     </>
   )
 }

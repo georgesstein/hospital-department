@@ -1,6 +1,7 @@
 type Props = {
-  columns: Array<string>;
-  rows: Array<string[]>;
+  columns: Array<string> /* header cells */
+  rows: Array<string[]> /* body cells; first cell of each row is used as unique row identifier */
+  renderCell?: (p: { value: string, cellIndex: number, rowId: string }) => string | JSX.Element
 }
 
 // type ROW = {
@@ -13,8 +14,9 @@ type Props = {
 
 export default function Table(
   p: Props
-  // renderCell = ({ value }) => value,
 ) {
+  const { renderCell = ({ value }) => value } = p
+  
   return (
     <table className="table">
       <thead>
@@ -34,8 +36,7 @@ export default function Table(
               {cells.map((value, cellIndex) => {
                 return (
                   <td key={`${rowId}${cellIndex}${value}`}>
-                    {value}
-                    {/* {renderCell({ value, cellIndex, rowId })} */}
+                    {renderCell({ value, cellIndex, rowId })}
                   </td>
                 )
               })}
