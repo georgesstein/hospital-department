@@ -1,34 +1,41 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import Table from '../components/Table'
+import { getEmployees } from '../api/api'
 
-const COLUMNS = ['ID', 'Full Name', 'Birth Date']
-const ROWS = [
-  {
-    id: 1,
-    firstName: 'Леонид',
-    lastName: 'Старокадомский',
-    middleName: 'Михайлович',
-    birthDate: '1875-03-27',
-    phone: '+79975669545',
-  },
-  {
-    id: 2,
-    firstName: 'Владимир',
-    lastName: 'Демихов',
-    middleName: 'Петрович',
-    birthDate: '1916-06-18',
-    phone: '+74951263366',
-  },
-]
+import Table from '../components/Table'
+import Loading from '../components/Loading'
+
+type Employees = Array<Employee>
+
+type Employee = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  birthDate: string;
+  phone: string;
+}
+
+const HEADERS = ['ID', 'Full Name', 'Birth Date']
 
 export default function EmployeesPage() {
+  const [employees, setEmployees] = useState<Employees | null>(null)
+
+  useEffect(() => {
+    getEmployees().then(setEmployees)
+  }, [])
+
+  if (employees === null) {
+    return <Loading />
+  }
+  
   return (
     <>
       <Link to={`/employees/:id`}>to employee</Link>
       <Table 
-        columns={COLUMNS} 
-        rows={ROWS.map(employee => {
+        columns={HEADERS} 
+        rows={employees.map(employee => {
           const { id, firstName, lastName, middleName, birthDate} = employee
           const fullName = `${lastName} ${firstName} ${middleName}`
 
