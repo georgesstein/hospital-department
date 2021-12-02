@@ -6,9 +6,9 @@ import { getWorklog } from '../api/api'
 
 import Loading from '../components/Loading'
 
-type Worklogs = Array<Worklog>
+type WorkLogs = Array<WorkLog>
 
-type Worklog = {
+type WorkLog = {
   id: number;
   employee_id: number;
   from: string;
@@ -19,18 +19,18 @@ export const EMPLOYEE_ID = 'employeeId'
 
 export default function EmployeePage() {
   const { employeeId } = useParams<typeof EMPLOYEE_ID>()
-  const [worklog, setWorklog] = useState<Worklogs | null>(null)
+  const [workLog, setWorkLog] = useState<WorkLogs | null>(null)
 
   useEffect(() => {
-    getWorklog().then(setWorklog)
+    getWorklog().then(data => {
+      const mappedData
+    })
   }, [employeeId])
 
-  if (worklog === null) {
+  if (workLog === null) {
     <Loading />
   }
 
-  console.log(worklog)
-  
   return (
     <>
       <Link to="/employees">to employees</Link>
