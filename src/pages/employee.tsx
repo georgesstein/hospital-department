@@ -2,32 +2,28 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 
-import { getWorklog } from '../api/api'
+import API from '../api/index'
+import * as I from '../DTO'
 
 import Loading from '../components/Loading'
-
-type WorkLogs = Array<WorkLog>
-
-type WorkLog = {
-  id: number;
-  employee_id: number;
-  from: string;
-  to: string;
-}
 
 export const EMPLOYEE_ID = 'employeeId'
 
 export default function EmployeePage() {
   const { employeeId } = useParams<typeof EMPLOYEE_ID>()
-  const [workLog, setWorkLog] = useState<WorkLogs | null>(null)
+  const [workLog, setWorkLog] = useState()
 
   useEffect(() => {
-    getWorklog().then(data => {
-      const mappedData
-    })
-  }, [employeeId])
+    API.get.workLogs().then(data => {
+      const parsedData = data.map(log => {
+        return { from: Date.parse(log.from), to: Date.parse(log.to), employee_id: log.employee_id, id: log.id }
+      })
 
-  if (workLog === null) {
+      const currentEmployeeWorkLog = parsedData.filter(log => log.employee_id === parseInt(employeeId))
+    })
+  })
+
+  if (!workLog) {
     <Loading />
   }
 
