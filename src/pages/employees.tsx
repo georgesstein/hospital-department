@@ -1,54 +1,42 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import { getEmployees } from '../api/api'
+import API from '../api/index'
+import * as I from '../DTO'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
 
-type Employees = Array<Employee>
-
-type Employee = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  birthDate: string;
-  phone: string;
-}
-
-const HEADERS = ['ID', 'Full Name', 'Birth Date']
-
 export default function EmployeesPage() {
-  const [employees, setEmployees] = useState<Employees | null>(null)
+  const [employees, setEmployees] = useState<I.Employee[]>()
 
   useEffect(() => {
-    getEmployees().then(setEmployees)
+    API.get.employees().then(response => setEmployees(response))
   }, [])
 
-  if (employees === null) {
+  if (!employees) {
     return <Loading />
   }
-  
+
+  const sortedEmployees = employees.sort((a, b) => a.lastName.localeCompare(b.lastName))
+
   return (
-    <>
-      <Link to={`/employees/:id`}>to employee</Link>
-      <Table 
-        columns={HEADERS} 
-        rows={employees.map(employee => {
-          const { id, firstName, lastName, middleName, birthDate} = employee
-          const fullName = `${lastName} ${firstName} ${middleName}`
+    <Table
+      columns={['ID', 'Full Name', 'Birth Date']}
+      rows={sortedEmployees.map(employee => {
+        const { id, firstName, lastName, middleName, birthDate } = employee
+        const fullName = `${lastName} ${firstName} ${middleName}`
+        const formattedDate = new Date(birthDate).toLocaleDateString('ru-RU')
 
-          return [`${id}`, fullName, birthDate]
-        })}
-        renderCell={({ value, cellIndex, rowId }) => {
-          if (cellIndex === 1) {
-            return <Link to={`/employees/${rowId}`}>{value}</Link>
-          }
+        return [`${id}`, fullName, formattedDate]
+      })}
+      renderCell={({ value, cellIndex, rowId }) => {
+        if (cellIndex === 1) {
+          return <Link to={`/employees/${rowId}`}>{value}</Link>
+        }
 
-          return value
-        }}
-      />
-    </>
+        return value
+      }}
+    />
   )
 }
