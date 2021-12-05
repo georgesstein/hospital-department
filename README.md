@@ -1,46 +1,33 @@
-# Getting Started with Create React App
+### Before checking install dependencies at project root
+```
+npm i
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### How to check:
+```
+npm run
+```
 
-## Available Scripts
+### Requirements
+- Необходимо создать приложение с двумя страницами. На первой нужно вывести список всех врачей(сотрудников) в таблице с колонками: id, ФИО, дата рождения в формате dd.mm.yyyy. Таблица должна быть отсортирована по ФИО. По клику на ФИО сотрудника пользователь должен попадать на вторую страницу, где в виде таблицы должен отображаться список временных интервалов присутствия врача в больничном отделении.
+- В больничном отделении работает 6 врачей. По правилам внутреннего распорядка запрещено покидать отделение, когда в нем остается меньше 3 врачей.
+Подсветить красным цветом то время, когда покидание врачом отделения было сопряжено с нарушением правила внутреннего распорядка.
 
-In the project directory, you can run:
+### Constraints
+вместо browser fetch использовать mockFetch из mock-fetch.js:
+  - /api/employees/ - (Метод возвращает список всех сотрудников отделения)
+  - /api/employees/worklog/ - (Метод возвращает данные со СКУД больничного отделения)
+- Необходимо решить задачу используя: 
+  - React
+  - Redux
+  - Router
+- Можно использовать Material UI
+- Нельзя использовать любые сторонние библиотеки
+- Нельзя модифицировать файлы mock-fetch.js и api.js
 
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### User story
+- Пользователь заходит на домашнюю страницу и видит таблицу со списком сотрудников с колонками id, ФИО, дата рождения.
+- При клике на ФИО сотрудника пользователь попадает на другую страницу и видит таблицу со списком временных интервалов(начало и окончание интервала) присутствия данного сотрудника.
+- Если определенный интервал времени был сопряжен с нарушением(см. ниже), он будет подсвечен красным цветом.
+#### Нарушение:
+В больничном отделении работает 6 врачей. По правилам внутреннего распорядка запрещено покидать отделение, когда в нем остается меньше 3 врачей.
