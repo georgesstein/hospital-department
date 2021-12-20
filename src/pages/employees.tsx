@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import API from '../api/index'
-import * as I from '../DTO'
+import * as I from '../types'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
