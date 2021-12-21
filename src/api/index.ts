@@ -13,8 +13,8 @@ const API = {
             from: Date.parse(log.from),
             to: Date.parse(log.to),
             formattedLogRange: {
-              from: log.from,
-              to: log.to,
+              from: new Date(log.from).toLocaleString('ru-RU'),
+              to: new Date(log.to).toLocaleString('ru-RU'),
             },
           })
         )
