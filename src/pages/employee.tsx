@@ -14,36 +14,25 @@ export const EMPLOYEE_ID = 'employeeId'
 
 const MIN_EMPLOYEES_ON_DUTY = 3
 
-function RenderEmployeePage(p: { employeeId: number }) {
-  const [workLog, setWorkLog] = useState<I.WorkLogItem[]>()
+function EmployeeWorkLogTable(p: { workLog: I.WorkLogItem[]; employeeId: number }) {
+  const currentEmployeeLog = p.workLog.filter(log => log.employeeId === p.employeeId)
+  const restEmployeesPresenceTimeRanges: [number, number][] = p.workLog
+    .filter(log => log.employeeId !== p.employeeId)
+    .map(({ from, to }) => [from, to])
 
-  useEffect(() => {
-    // API.get.workLogs().then(setWorkLog)
-    API.get.workLogs().then(setWorkLog)
-  }, [])
-  
-  if (!workLog) {
-    return <Loading />
-  }
-  
-  const currentEmployeeLog = workLog.filter(log => log.employeeId === p.employeeId)
-  const restEmployeesPresenceTimeRanges: [number, number][] = workLog.filter(log => log.employeeId !== p.employeeId).map(({ from, to }) => [from, to])
-  
-  const violationsIds = findViolationIds(currentEmployeeLog, restEmployeesPresenceTimeRanges)
-  console.log(violationsIds)
+  const logWithViolationIds = findViolationIds(currentEmployeeLog, restEmployeesPresenceTimeRanges)
 
   return (
     <>
       <Link to='/employees'>to employees</Link>
       <h1>Employee ID: {p.employeeId}</h1>
-      <Table 
+      <Table
         columns={['ID', 'Entrance', 'Exit']}
         rows={currentEmployeeLog.map(log => {
-          return [`${log.id}`, `${log.formattedLogRange.from}`, `${log.formattedLogRange.to}`]
+          return [`${log.id}`, `${formatDate(log.from)}`, `${formatDate(log.to)}`]
         })}
         renderCell={({ value, cellIndex, rowId }) => {
-          if (cellIndex === 2 && violationsIds.includes(parseInt(rowId))) {
-
+          if (cellIndex === 2 && logWithViolationIds.includes(parseInt(rowId))) {
             return <span style={{ color: 'red' }}>{value}</span>
           }
 
@@ -54,6 +43,20 @@ function RenderEmployeePage(p: { employeeId: number }) {
   )
 }
 
+function RenderEmployeePage(p: { employeeId: number }) {
+  const [workLog, setWorkLog] = useState<I.WorkLogItem[]>()
+
+  useEffect(() => {
+    API.get.workLogs().then(setWorkLog)
+  }, [])
+
+  if (!workLog) {
+    return <Loading />
+  }
+
+  return <EmployeeWorkLogTable workLog={workLog} employeeId={p.employeeId} />
+}
+
 export default function EmployeePage() {
   const { employeeId } = useParams<typeof EMPLOYEE_ID>()
   const parsedEmployeeId = parseInt(employeeId || '', 10)
@@ -62,15 +65,18 @@ export default function EmployeePage() {
     return <NotFound />
   }
 
-  return <RenderEmployeePage employeeId={parsedEmployeeId}/>
-
+  return <RenderEmployeePage employeeId={parsedEmployeeId} />
 }
 
 const findViolationIds = (employeeLog: I.WorkLogItem[], collegesLog: Array<[number, number]>): number[] =>
-  employeeLog.reduce((acc: number[], { to, id }) => {
+  employeeLog.reduce<number[]>((acc, { to, id }) => {
     if (countIntersections(to, collegesLog) < MIN_EMPLOYEES_ON_DUTY) {
       acc.push(id)
     }
 
     return acc
   }, [])
+
+function formatDate(timestamp: number) {
+  return new Date(timestamp).toLocaleString('ru-RU')
+}

@@ -19,9 +19,4 @@ export type WorkLogItem = {
   employeeId: number
   from: number
   to: number
-
-  formattedLogRange: {
-    from: string
-    to: string
-  }
 }

@@ -12,10 +12,6 @@ const API = {
             employeeId: log.employee_id,
             from: Date.parse(log.from),
             to: Date.parse(log.to),
-            formattedLogRange: {
-              from: new Date(log.from).toLocaleString('ru-RU'),
-              to: new Date(log.to).toLocaleString('ru-RU'),
-            },
           })
         )
       ),
