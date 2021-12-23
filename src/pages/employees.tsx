@@ -1,18 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import API from '../api/index'
-import * as I from '../types'
+import { setEmployees } from '../store/actions/employees'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
 
+import * as I from '../types'
+
+const employeesSelector = (s: I.AppState) => s.employees
+
 export default function EmployeesPage() {
-  const [employees, setEmployees] = useState<I.Employee[]>()
+  const dispatch = useDispatch()
+  const employees = useSelector(employeesSelector)
 
   useEffect(() => {
-    API.get.employees().then(response => setEmployees(response))
-  }, [])
+    API.get.employees().then(response => dispatch(setEmployees(response)))
+  }, [dispatch])
 
   if (!employees) {
     return <Loading />

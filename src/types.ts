@@ -20,3 +20,8 @@ export type WorkLogItem = {
   from: number
   to: number
 }
+
+export type AppState = {
+  workLog: WorkLogItem[] | null
+  employees: Employee[] | null
+}
