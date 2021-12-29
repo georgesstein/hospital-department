@@ -3,7 +3,7 @@ import * as I from '../types'
 
 const API = {
   get: {
-    employees: vendorAPI.getEmployees as () => Promise<I.Employee[]>,
+    employees: () => vendorAPI.getEmployees().then((employees: I.Employee[]) => employees),
     workLogs: () =>
       vendorAPI.getWorklog().then((logs: I.WorkLogItemDTO[]) =>
         logs.map(
