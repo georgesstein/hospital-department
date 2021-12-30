@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 
 import API from '../api/index'
+import { setWorkLog } from '../store/actions/employees'
+
 import * as I from '../types'
 import countIntersections from '../utils/count-intersections'
+import couldBeNumber from '../utils/could-be-number'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
@@ -14,11 +18,17 @@ export const EMPLOYEE_ID = 'employeeId'
 
 const MIN_EMPLOYEES_ON_DUTY = 3
 
+const workLogSelector = (s: I.AppState) => s.workLog
+
 function EmployeeWorkLogTable(p: { workLog: I.WorkLogItem[]; employeeId: number }) {
   const currentEmployeeLog = p.workLog.filter(log => log.employeeId === p.employeeId)
   const restEmployeesPresenceTimeRanges: [number, number][] = p.workLog
     .filter(log => log.employeeId !== p.employeeId)
     .map(({ from, to }) => [from, to])
+
+  if (currentEmployeeLog.length === 0) {
+    return <NotFound />
+  }
 
   const logWithViolationIds = findViolationIds(currentEmployeeLog, restEmployeesPresenceTimeRanges)
 
@@ -44,11 +54,12 @@ function EmployeeWorkLogTable(p: { workLog: I.WorkLogItem[]; employeeId: number 
 }
 
 function RenderEmployeePage(p: { employeeId: number }) {
-  const [workLog, setWorkLog] = useState<I.WorkLogItem[]>()
+  const dispatch = useDispatch()
+  const workLog = useSelector(workLogSelector)
 
   useEffect(() => {
-    API.get.workLogs().then(setWorkLog)
-  }, [])
+    API.get.workLogs().then(response => dispatch(setWorkLog(response)))
+  }, [dispatch])
 
   if (!workLog) {
     return <Loading />
@@ -61,7 +72,7 @@ export default function EmployeePage() {
   const { employeeId } = useParams<typeof EMPLOYEE_ID>()
   const parsedEmployeeId = parseInt(employeeId || '', 10)
 
-  if (isNaN(parsedEmployeeId)) {
+  if (!couldBeNumber(employeeId || '')) {
     return <NotFound />
   }
 
