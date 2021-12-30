@@ -1,4 +1,4 @@
-import countIntersections from './count-intersections'
+import countIntersections from '../count-intersections'
 
 describe('Check "countIntersection" function', () => {
   it('Find no intersections', () => {
