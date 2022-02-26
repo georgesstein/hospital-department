@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 
-import API from '../api/index'
-import { setWorkLog } from '../store/actions/employees'
+// import API from '../api/index'
+import * as action from '../store/actions/employees'
 
 import * as I from '../types'
 import countIntersections from '../utils/count-intersections'
-import couldBeNumber from '../utils/could-be-number'
+import isNumber from '../utils/is-number'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
@@ -58,7 +58,8 @@ function RenderEmployeePage(p: { employeeId: number }) {
   const workLog = useSelector(workLogSelector)
 
   useEffect(() => {
-    API.get.workLogs().then(response => dispatch(setWorkLog(response)))
+    // API.get.workLogs().then(response => dispatch(setWorkLog(response)))
+    dispatch(action.workLog.fetch())
   }, [dispatch])
 
   if (!workLog) {
@@ -72,7 +73,7 @@ export default function EmployeePage() {
   const { employeeId } = useParams<typeof EMPLOYEE_ID>()
   const parsedEmployeeId = parseInt(employeeId || '', 10)
 
-  if (!couldBeNumber(employeeId || '')) {
+  if (!isNumber(employeeId || '')) {
     return <NotFound />
   }
 

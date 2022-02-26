@@ -5,13 +5,13 @@ import * as I from '../../types'
 
 export function employeesReducer(
   state: I.AppState['employees'] = null,
-  action: ReturnType<typeof actionCreator['setEmployees']>
+  action: ReturnType<typeof actionCreator['employees']['success']>
 ): I.AppState['employees'] {
   switch (action.type) {
-    case actionType.SET_EMPLOYEES: {
+    case actionType.FETCH_EMPLOYEES_SUCCESS: {
       return action.payload
     }
-    
+
     default:
       return state
   }
@@ -19,14 +19,14 @@ export function employeesReducer(
 
 export function workLogReducer(
   state: I.AppState['workLog'] = null,
-  action: ReturnType<typeof actionCreator['setWorkLog']>
+  action: ReturnType<typeof actionCreator['workLog']['success']>
 ): I.AppState['workLog'] {
   switch (action.type) {
-    case actionType.SET_WORKLOG: {
+    case actionType.FETCH_WORKLOG_SUCCESS: {
       return action.payload
     }
-    
-    default: 
+
+    default:
       return state
   }
 }

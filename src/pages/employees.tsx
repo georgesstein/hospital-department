@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import API from '../api/index'
-import { setEmployees } from '../store/actions/employees'
+// import API from '../api/index'
+import * as action from '../store/actions/employees'
 
 import Table from '../components/Table'
 import Loading from '../components/Loading'
@@ -17,7 +17,8 @@ export default function EmployeesPage() {
   const employees = useSelector(employeesSelector)
 
   useEffect(() => {
-    API.get.employees().then(response => dispatch(setEmployees(response)))
+    // API.get.employees().then(response => dispatch(setEmployees(response)))
+    dispatch(action.employees.fetch())
   }, [dispatch])
 
   if (!employees) {
