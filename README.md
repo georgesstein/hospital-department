@@ -5,7 +5,7 @@ npm i
 
 ### How to check:
 ```
-npm run
+npm start
 ```
 
 ### Requirements
